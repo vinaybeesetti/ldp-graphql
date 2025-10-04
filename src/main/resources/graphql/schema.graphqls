@@ -1,0 +1,99 @@
+type Query {
+    getUserById(id: ID!): User
+    getProjectById(id: ID!): Project
+    getAllProjects(searchFilter: ProjectSearchInput): [Project]
+    getReviewByUserId(id: ID!): [Review]
+}
+
+type Mutation {
+    createUser(user: UserInput): User
+    createNewProject(project: ProjectInput): Project
+    applyForProject(applicationInput: ApplicationInput): Application
+    applicationApproval(appApprovalInput: AppApprovalInput): Application
+    submitProjectReview(projectReviewInput: ProjectReviewInput): Review
+}
+
+input ProjectReviewInput {
+    reviewer_id: Int
+    reviewee_id: Int
+    application_id: Int
+    comment: String
+    rating: Int
+}
+
+input AppApprovalInput {
+    applicationId: Int
+    clientId: Int
+    status: Status
+}
+
+input ProjectSearchInput {
+    minBudget: Float
+    maxBudget: Float
+    search: String
+}
+
+input UserInput {
+    name: String!
+    email: String!
+    role: Role!
+}
+
+input ProjectInput {
+    title: String!
+    description: String!
+    budget: Float!
+    client_id: Int!
+}
+
+input ApplicationInput {
+    applicant_id: Int!
+    project_id: Int!
+    coverLetter: String!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    role: Role!
+    projects: [Project!] # if client
+    applications: [Application!] # If FREELANCER
+}
+
+type Project {
+    id: ID!
+    title: String!
+    description: String!
+    budget: Float!
+    client: User!
+    applications: [Application!]!
+}
+
+type Application {
+    id: ID!
+    freelancer: User!
+    project: Project!
+    coverLetter: String!
+    status: Status! # Enum (PENDING, ACCEPTED, REJECTED)
+}
+
+type Review {
+    id: ID!
+    reviewer: User!
+    reviewee: User!
+    rating: Int!
+    comment: String!
+
+}
+
+enum Role {
+    CLIENT
+    FREELANCER
+}
+
+enum Status {
+    PENDING
+    ACCEPTED
+    REJECTED
+}
