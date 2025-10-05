@@ -25,8 +25,8 @@ public class ProjectController {
     }
 
     @QueryMapping
-    public List<Project> getAllProjects(@Argument ProjectSearchInput searchFilter) {
-        return this.projectService.getAllProjects(searchFilter);
+    public List<Project> getAllProjects(@Argument ProjectSearchInput searchFilter, @Argument Integer page, @Argument Integer size) {
+        return this.projectService.getAllProjects(searchFilter, page, size);
     }
 
     @MutationMapping

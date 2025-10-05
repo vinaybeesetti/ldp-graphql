@@ -9,6 +9,8 @@ import com.tri.freelancemp.pojo.ProjectSearchInput;
 import com.tri.freelancemp.repository.ProjectRepository;
 import com.tri.freelancemp.repository.UserRepository;
 import com.tri.freelancemp.util.ProjectSpecification;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +31,21 @@ public class ProjectService {
         return this.projectRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Project not found"));
     }
 
-    public List<Project> getAllProjects(ProjectSearchInput searchInput) {
+    public List<Project> getAllProjects(ProjectSearchInput searchInput, Integer page, Integer size) {
+        // Provide default values for pagination if not supplied, which is a good practice for enterprise applications.
+        int pageNumber = (page != null && page >= 0) ? page : 0;
+        int pageSize = (size != null && size > 0) ? size : 10; // Default size to 10
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
         if (searchInput == null) {
-            return this.projectRepository.findAll();
+            return this.projectRepository.findAll(pageable).getContent();
         }
 
         Specification<Project> spec = Specification.allOf(ProjectSpecification.budgetGreaterThanEqual(searchInput.getMinBudget()),
                 ProjectSpecification.budgetLessThanEqual(searchInput.getMaxBudget()),
                 ProjectSpecification.keywordSearch(searchInput.getSearch()));
 
-        return this.projectRepository.findAll(spec);
+        return this.projectRepository.findAll(spec, pageable).getContent();
     }
 
     public Project addProject(Project project) {

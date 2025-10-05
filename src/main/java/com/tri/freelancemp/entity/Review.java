@@ -17,16 +17,16 @@ public class Review {
     private Long id;
 
     // reviewer → the user who wrote the review
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id", nullable = true)
     private User reviewer;
 
     // reviewee → the user being reviewed
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewee_id", nullable = true)
     private User reviewee;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = true)
     private Application application;
 

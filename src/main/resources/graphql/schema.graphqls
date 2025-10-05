@@ -1,7 +1,7 @@
 type Query {
     getUserById(id: ID!): User
     getProjectById(id: ID!): Project
-    getAllProjects(searchFilter: ProjectSearchInput): [Project]
+    getAllProjects(searchFilter: ProjectSearchInput, page: Int, size: Int): [Project]
     getReviewByUserId(id: ID!): [Review]
 }
 

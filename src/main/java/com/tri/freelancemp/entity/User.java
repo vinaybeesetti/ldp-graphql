@@ -22,9 +22,9 @@ public class User {
     private String email;
     private Role role;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Application> applications;
 }
